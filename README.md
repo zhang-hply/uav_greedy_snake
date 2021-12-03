@@ -1,4 +1,4 @@
-
+[![IMAGE ALT TEXT HERE](./resources/greedy_snake_main.jpg)](https://www.bilibili.com/video/BV1mP4y1V7gY?spm_id_from=333.999.0.0)
 # uav_greedy_snake
 
 Use multi-uav to imitate the game of greedy snake
