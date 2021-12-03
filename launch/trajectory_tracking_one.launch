@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="mav_name_1" value="cf1"/>
+    <arg name="mav_name_2" value="cf2"/>
+    <arg name="mav_name_3" value="cf3"/>
+    <arg name="mav_name_4" value="cf4"/>
+    <arg name="mav_name_5" value="cf5"/>
+    <arg name="mav_name_1_start" value="true"/>
+    <arg name="mav_name_2_start" value="true"/>
+    <arg name="mav_name_3_start" value="true"/>
+    <arg name="mav_name_4_start" value="true"/>
+    <arg name="mav_name_5_start" value="true"/>
+
+    <arg name="uri1" default="radio://0/70/2M/E7E7E7E701" />
+    <arg name="uri2" default="radio://0/80/2M/E7E7E7E702" />
+    <arg name="uri3" default="radio://0/90/2M/E7E7E7E703" />
+    <arg name="uri4" default="radio://0/100/2M/E7E7E7E704" />
+    <arg name="uri5" default="radio://0/60/2M/E7E7E7E705" />
+    <arg name="server" default="192.168.1.79"/>
+
+    <include file="$(find crazyflie_driver)/launch/crazyflie_server.launch">
+    </include>
+
+    <node pkg="vrpn_client_ros" type="vrpn_client_node" name="vrpn_client_node" output="screen">
+        <rosparam subst_value="true">
+        server: $(arg server)
+        port: 3883
+
+        update_frequency: 100.0
+        frame_id: world
+
+        # Use the VRPN server's time, or the client's ROS time.
+        use_server_time: false
+        broadcast_tf: true
+
+        # Must either specify refresh frequency > 0.0, or a list of trackers to create
+        refresh_tracker_frequency: 1.0
+        #trackers:
+        #- FirstTracker
+        #- SecondTracker
+        </rosparam>
+        <remap from="vrpn_client_node/$(arg mav_name_1)/pose" to="$(arg mav_name_1)/external_pose"/>
+        <remap from="vrpn_client_node/$(arg mav_name_2)/pose" to="$(arg mav_name_2)/external_pose"/>
+        <remap from="vrpn_client_node/$(arg mav_name_3)/pose" to="$(arg mav_name_3)/external_pose"/>
+        <remap from="vrpn_client_node/$(arg mav_name_4)/pose" to="$(arg mav_name_4)/external_pose"/>
+        <remap from="vrpn_client_node/$(arg mav_name_5)/pose" to="$(arg mav_name_5)/external_pose"/>
+    </node>
+ 
+    <node name="record" pkg="rosbag" type="record" args="-a -o /home/anfield/data/tmp/crazyflie_show_demo/cf"/>
+    
+    <group if="$(arg mav_name_1_start)">
+    <group ns="$(arg mav_name_1)">
+        <!--<param name="crazyflie/pid_rate/yaw_kp" value="200"/>-->
+        <node pkg="crazyflie_driver" type="crazyflie_add" name="crazyflie_add" output="screen">
+            <param name="uri" value="$(arg uri1)" />
+            <param name="tf_prefix" value="$(arg mav_name_1)" />
+            <param name="enable_logging" value="False" />
+            <!-- <rosparam>
+                genericLogTopics: ["log1"]
+                genericLogTopicFrequencies: [10]
+                genericLogTopic_log1_Variables: ["stateEstimate.z", "kalman.stateZ","locSrv.x", "locSrv.z"]
+            </rosparam> -->
+        </node>
+        
+        <node name="crazyflie_demo_hover" pkg="crazyflie_show" type="trajectory_tracking_node" output="screen">
+            <param name="tf_prefix" value="$(arg mav_name_1)" />
+            <param name="waypoint_file_path" value="$(find crazyflie_show)/resources/waypoint_1.txt"/>
+        </node>
+    </group>
+    </group>
+
+        <group if="$(arg mav_name_2_start)">
+    <group ns="$(arg mav_name_2)">
+        <!--<param name="crazyflie/pid_rate/yaw_kp" value="200"/>-->
+        <node pkg="crazyflie_driver" type="crazyflie_add" name="crazyflie_add" output="screen">
+            <param name="uri" value="$(arg uri2)" />
+            <param name="tf_prefix" value="$(arg mav_name_2)" />
+            <param name="enable_logging" value="False" />
+            <!-- <rosparam>
+                genericLogTopics: ["log1"]
+                genericLogTopicFrequencies: [10]
+                genericLogTopic_log1_Variables: ["stateEstimate.z", "kalman.stateZ","locSrv.x", "locSrv.z"]
+            </rosparam> -->
+        </node>
+        
+        <node name="crazyflie_demo_hover" pkg="crazyflie_show" type="trajectory_tracking_node" output="screen">
+            <param name="tf_prefix" value="$(arg mav_name_2)" />
+            <param name="waypoint_file_path" value="$(find crazyflie_show)/resources/waypoint_2.txt"/>
+        </node>
+    </group>
+    </group>
+
+<group if="$(arg mav_name_3_start)">
+        <group ns="$(arg mav_name_3)">
+        <!--<param name="crazyflie/pid_rate/yaw_kp" value="200"/>-->
+        <node pkg="crazyflie_driver" type="crazyflie_add" name="crazyflie_add" output="screen">
+            <param name="uri" value="$(arg uri3)" />
+            <param name="tf_prefix" value="$(arg mav_name_3)" />
+            <param name="enable_logging" value="False" />
+            <!-- <rosparam>
+                genericLogTopics: ["log1"]
+                genericLogTopicFrequencies: [10]
+                genericLogTopic_log1_Variables: ["stateEstimate.z", "kalman.stateZ","locSrv.x", "locSrv.z"]
+            </rosparam> -->
+        </node>
+        
+        <node name="crazyflie_demo_hover" pkg="crazyflie_show" type="trajectory_tracking_node" output="screen">
+            <param name="tf_prefix" value="$(arg mav_name_3)" />
+            <param name="waypoint_file_path" value="$(find crazyflie_show)/resources/waypoint_3.txt"/>
+        </node>
+    </group>
+    </group>
+
+<group if="$(arg mav_name_4_start)">
+        <group ns="$(arg mav_name_4)">
+        <!--<param name="crazyflie/pid_rate/yaw_kp" value="200"/>-->
+        <node pkg="crazyflie_driver" type="crazyflie_add" name="crazyflie_add" output="screen">
+            <param name="uri" value="$(arg uri4)" />
+            <param name="tf_prefix" value="$(arg mav_name_4)" />
+            <param name="enable_logging" value="False" />
+            <!-- <rosparam>
+                genericLogTopics: ["log1"]
+                genericLogTopicFrequencies: [10]
+                genericLogTopic_log1_Variables: ["stateEstimate.z", "kalman.stateZ","locSrv.x", "locSrv.z"]
+            </rosparam> -->
+        </node>
+        
+        <node name="crazyflie_demo_hover" pkg="crazyflie_show" type="trajectory_tracking_node" output="screen">
+            <param name="tf_prefix" value="$(arg mav_name_4)" />
+            <param name="waypoint_file_path" value="$(find crazyflie_show)/resources/waypoint_4.txt"/>
+        </node>
+    </group>
+</group>
+
+<group if="$(arg mav_name_5_start)">
+        <group ns="$(arg mav_name_5)">
+        <!--<param name="crazyflie/pid_rate/yaw_kp" value="200"/>-->
+        <node pkg="crazyflie_driver" type="crazyflie_add" name="crazyflie_add" output="screen">
+            <param name="uri" value="$(arg uri5)" />
+            <param name="tf_prefix" value="$(arg mav_name_5)" />
+            <param name="enable_logging" value="False" />
+            <!-- <rosparam>
+                genericLogTopics: ["log1"]
+                genericLogTopicFrequencies: [10]
+                genericLogTopic_log1_Variables: ["stateEstimate.z", "kalman.stateZ","locSrv.x", "locSrv.z"]
+            </rosparam> -->
+        </node>
+        
+        <node name="crazyflie_demo_hover" pkg="crazyflie_show" type="trajectory_tracking_node" output="screen">
+            <param name="tf_prefix" value="$(arg mav_name_5)" />
+            <param name="waypoint_file_path" value="$(find crazyflie_show)/resources/waypoint_5.txt"/>
+        </node>
+    </group>
+    </group>
+</launch>
