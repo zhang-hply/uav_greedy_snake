@@ -13,7 +13,7 @@ git clone git@github.com:whoenig/crazyflie_cpp.git
 git clone git@github.com:whoenig/crazyflie_ros.git
 ```
 ### External pose
-The project is avaliable to any motion capture system. The interface between MoCap and ROS is:
+Any motion capture system is avaliable to the project. The interface between MoCap and ROS is:
 ```
 git clone git@github.com:ros-drivers/vrpn_client_ros.git
 ```
