@@ -9,7 +9,6 @@ Use multi-uav to imitate the game of greedy snake
 ### Ubuntu 18.04
 
 ```
-git clone git@github.com:whoenig/crazyflie_cpp.git
 git clone git@github.com:whoenig/crazyflie_ros.git
 ```
 ### External pose
